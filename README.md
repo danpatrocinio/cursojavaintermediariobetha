@@ -1,3 +1,3 @@
-# Curso Java Intermediário Betha
+# Curso de Java Intermediário Betha
 
-Projeto para o curso Java Intermediário Betha
+Projeto para o curso de Java Intermediário Betha
