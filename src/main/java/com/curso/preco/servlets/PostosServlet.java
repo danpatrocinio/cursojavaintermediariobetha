@@ -13,7 +13,8 @@ public class PostosServlet extends GenericCrud<Postos> {
 
 	@Override
 	public void init() throws ServletException {
-		repository = new PostosRepository();
+		repositoryClass = PostosRepository.class;
+		entityClass = Postos.class;
 	}
 
 }

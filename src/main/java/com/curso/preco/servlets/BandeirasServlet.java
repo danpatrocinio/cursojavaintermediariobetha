@@ -13,7 +13,8 @@ public class BandeirasServlet extends GenericCrud<Bandeiras> {
 
 	@Override
 	public void init() throws ServletException {
-		repository = new BandeirasRepository();
+		repositoryClass = BandeirasRepository.class;
+		entityClass = Bandeiras.class;
 	}
 
 }

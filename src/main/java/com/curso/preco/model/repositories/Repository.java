@@ -1,19 +1,21 @@
 package com.curso.preco.model.repositories;
 
-import java.util.List;
+import com.curso.preco.exceptions.RepositoryException;
 
-import com.curso.preco.model.Entity;
+public interface Repository<E extends com.curso.preco.model.Entity> {
 
-public interface Repository<E extends Entity> {
+	public void delete(Long id) throws RepositoryException;
 
-	public List<E> getAll();
+	public java.util.List<E> getAll() throws RepositoryException;
 
-	public E getById(Long id);
+	public E getById(Long id) throws RepositoryException;
 
-	public void remove(E entity) throws Exception;
+	public E save(E entity) throws RepositoryException;
 
-	public E save(E entity) throws Exception;
+	public E update(E entity) throws RepositoryException;
 
-	public E update(E entity) throws Exception;
+	default String message(String msg, Object... args) {
+		return String.format(msg, args);
+	}
 
 }
