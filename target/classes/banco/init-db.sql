@@ -4,18 +4,24 @@ CREATE DATABASE IF NOT EXISTS precodb;
 
 use precodb;
 
-create table IF NOT EXISTS bandeiras (
-	id INT(6) AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
-	nome VARCHAR(255) NOT NULL UNIQUE,
-	version BIGINT
-);
-
+-- CIDADES
 CREATE TABLE IF NOT EXISTS cidades (
   codigo INT(6) NOT NULL UNIQUE PRIMARY KEY,
   nome VARCHAR(50) NOT NULL,
   uf CHAR(2) NOT NULL
-);
+) Engine = INNODB;
 
+-- BANDEIRAS
+create table IF NOT EXISTS bandeiras (
+	id INT(6) AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL UNIQUE,
+	version BIGINT
+) Engine = INNODB;
+
+CREATE TRIGGER versioning_bandeiras_ins BEFORE INSERT ON bandeiras FOR EACH ROW SET NEW.version = (select now() + 0);
+CREATE TRIGGER versioning_bandeiras_upd BEFORE UPDATE ON bandeiras FOR EACH ROW SET NEW.version = (select now() + 0);
+
+-- POSTOS
 create table IF NOT EXISTS postos (
 	id BIGINT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
 	id_bandeira INT(6),
@@ -27,8 +33,12 @@ create table IF NOT EXISTS postos (
 	version BIGINT,
 	FOREIGN KEY (id_bandeira) REFERENCES bandeiras(id),
 	FOREIGN KEY (codigo_cidade) REFERENCES cidades(codigo)
-);
+) Engine = INNODB;
 
+CREATE TRIGGER versioning_postos_ins BEFORE INSERT ON postos FOR EACH ROW SET NEW.version = (select now() + 0);
+CREATE TRIGGER versioning_postos_upd BEFORE UPDATE ON postos FOR EACH ROW SET NEW.version = (select now() + 0);
+
+-- PRECOS_POSTOS
 create table IF NOT EXISTS precos_postos (
 	id BIGINT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
 	id_posto BIGINT NOT NULL,
@@ -36,8 +46,12 @@ create table IF NOT EXISTS precos_postos (
 	dh_data datetime,
 	version BIGINT,
 	FOREIGN KEY (id_posto) REFERENCES postos(id)
-);
+) Engine = INNODB;
 
+CREATE TRIGGER versioning_precos_postos_ins BEFORE INSERT ON precos_postos FOR EACH ROW SET NEW.version = (select now() + 0);
+CREATE TRIGGER versioning_precos_postos_upd BEFORE UPDATE ON precos_postos FOR EACH ROW SET NEW.version = (select now() + 0);
+
+-- VIEW PARA VISUALIZAÇÃO RESUMIDA
 CREATE OR REPLACE VIEW vw_precos AS
 SELECT id_posto, postos.nome as nome_posto, 
 	   bandeiras.id as id_bandeira, IFNULL(bandeiras.nome, 'Sem bandeira') as nome_bandeira, 
