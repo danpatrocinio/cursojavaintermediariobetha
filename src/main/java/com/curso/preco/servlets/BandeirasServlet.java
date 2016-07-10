@@ -3,7 +3,7 @@ package com.curso.preco.servlets;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
-import com.curso.preco.model.Bandeiras;
+import com.curso.preco.model.entities.Bandeiras;
 import com.curso.preco.model.repositories.BandeirasRepository;
 
 @WebServlet("/bandeiras")

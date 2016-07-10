@@ -1,8 +1,9 @@
-package com.curso.preco.model;
+package com.curso.preco.model.entities;
 
 import java.io.Serializable;
 
 import com.curso.preco.annotations.IgnoreOnParseable;
+import com.curso.preco.model.Entity;
 
 public class Postos implements Entity, Serializable {
 

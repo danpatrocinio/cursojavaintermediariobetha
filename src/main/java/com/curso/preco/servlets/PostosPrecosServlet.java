@@ -3,7 +3,7 @@ package com.curso.preco.servlets;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
-import com.curso.preco.model.PostosPrecos;
+import com.curso.preco.model.entities.PostosPrecos;
 import com.curso.preco.model.repositories.PostosPrecosRepository;
 
 @WebServlet("/precos")

@@ -1,8 +1,9 @@
-package com.curso.preco.model;
+package com.curso.preco.model.entities;
 
 import java.io.Serializable;
 
 import com.curso.preco.annotations.IgnoreOnParseable;
+import com.curso.preco.model.Entity;
 
 public class Cidades implements Entity, Serializable {
 
@@ -14,6 +15,10 @@ public class Cidades implements Entity, Serializable {
 	private String uf;
 
 	public Cidades() {
+	}
+
+	public Long getCodigo() {
+		return codigo;
 	}
 
 	@Override
@@ -32,6 +37,10 @@ public class Cidades implements Entity, Serializable {
 	@Override
 	public Long getVersion() {
 		return null;
+	}
+
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
 	}
 
 	@Override

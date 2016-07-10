@@ -1,8 +1,10 @@
-package com.curso.preco.model;
+package com.curso.preco.model.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+
+import com.curso.preco.model.Entity;
 
 public class PostosPrecos implements Entity, Serializable {
 

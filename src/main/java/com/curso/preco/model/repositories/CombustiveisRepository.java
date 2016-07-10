@@ -3,7 +3,7 @@ package com.curso.preco.model.repositories;
 import java.util.*;
 
 import com.curso.preco.exceptions.RepositoryException;
-import com.curso.preco.model.Combustiveis;
+import com.curso.preco.model.entities.Combustiveis;
 
 public class CombustiveisRepository extends GenericRepository<Combustiveis> {
 

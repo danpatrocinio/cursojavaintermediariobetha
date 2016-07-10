@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.curso.preco.exceptions.RepositoryException;
-import com.curso.preco.model.PostosPrecos;
+import com.curso.preco.model.entities.PostosPrecos;
 
 public class PostosPrecosRepository extends GenericRepository<PostosPrecos> {
 

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.curso.preco.exceptions.RepositoryException;
-import com.curso.preco.model.Bandeiras;
+import com.curso.preco.model.entities.Bandeiras;
 
 public class BandeirasRepository extends GenericRepository<Bandeiras> {
 
