@@ -32,16 +32,19 @@ create table IF NOT EXISTS postos (
 create table IF NOT EXISTS precos_postos (
 	id BIGINT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
 	id_posto BIGINT NOT NULL,
-	preco DECIMAL(2,2) NOT NULL,
+	preco DECIMAL(4,2) NOT NULL,
 	dh_data datetime,
 	version BIGINT,
 	FOREIGN KEY (id_posto) REFERENCES postos(id)
 );
 
 CREATE OR REPLACE VIEW vw_precos AS
-SELECT id_posto, postos.nome, bandeiras.id, IFNULL(bandeiras.nome, 'Sem bandeira'), precos_postos.preco, dh_data
+SELECT id_posto, postos.nome as nome_posto, 
+	   bandeiras.id as id_bandeira, IFNULL(bandeiras.nome, 'Sem bandeira') as nome_bandeira, 
+	   cidades.nome as cidade, postos.endereco, precos_postos.preco, dh_data as data
 FROM precos_postos
 JOIN postos ON (postos.id = precos_postos.id_posto)
+JOIN cidades ON (cidades.codigo = postos.codigo_cidade)
 LEFT JOIN bandeiras ON (bandeiras.id = postos.id_bandeira)
 WHERE dh_data = (select max(dh_data) from precos_postos pp where pp.id_posto = precos_postos.id_posto)
 group by precos_postos.id_posto;
