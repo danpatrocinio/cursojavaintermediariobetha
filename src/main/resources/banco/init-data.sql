@@ -25,15 +25,15 @@ insert into postos (id, id_bandeira, codigo_cidade, nome, endereco, detalhe_ende
 (null, null, 420460, "Posto de bandeira branca", "Rua 2 de Criciúma", "detalhe endereco 10", "999");
 
 insert into postos_precos (id, id_posto, id_combustivel, preco, dh_data) values
-(null, 1, 1, 3.31, now()),
-(null, 2, 1, 3.34, now()),
-(null, 3, 1, 3.41, now()),
-(null, 4, 1, 3.38, now()),
-(null, 5, 1, 3.31, now()),
-(null, 6, 1, 3.55, now()),
-(null, 7, 1, 3.54, now()),
-(null, 8, 1, 3.33, now()),
-(null, 9, 1, 3.40, now());
+(null, 1, 1, 3.31, now()),(null, 1, 5, 2.90, now()),
+(null, 2, 1, 3.34, now()),(null, 2, 5, 2.87, now()),
+(null, 3, 1, 3.41, now()),(null, 3, 4, 3.81, now()),
+(null, 4, 1, 3.38, now()),(null, 4, 2, 3.38, now()),
+(null, 5, 1, 3.31, now()),(null, 5, 5, 2.97, now()),
+(null, 6, 1, 3.55, now()),(null, 6, 3, 3.95, now()),
+(null, 7, 1, 3.54, now()),(null, 7, 6, 1.74, now()),
+(null, 8, 1, 3.33, now()),(null, 8, 6, 1.53, now()),
+(null, 9, 1, 3.40, now()),(null, 9, 7, 3.25, now());
 SELECT SLEEP(7);
 insert into postos_precos (id, id_posto, id_combustivel, preco, dh_data) values (null, 10, 1, 3.27, now());
 insert into postos_precos (id, id_posto, id_combustivel, preco, dh_data) values
