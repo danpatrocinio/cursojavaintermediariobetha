@@ -10,6 +10,7 @@ create table IF NOT EXISTS cidades (
 	uf CHAR(2)
 ) Engine = INNODB;
 
+-- BANDEIRAS
 create table IF NOT EXISTS bandeiras (
 	id INT(6) AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
 	nome VARCHAR(255) NOT NULL UNIQUE,
@@ -18,6 +19,17 @@ create table IF NOT EXISTS bandeiras (
 
 CREATE TRIGGER versioning_bandeiras_ins BEFORE INSERT ON bandeiras FOR EACH ROW SET NEW.version = (select now() + 0);
 CREATE TRIGGER versioning_bandeiras_upd BEFORE UPDATE ON bandeiras FOR EACH ROW SET NEW.version = (select now() + 0);
+
+-- COMBUSTÍVEIS
+create table IF NOT EXISTS combustiveis (
+	id INT(3) AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
+	descricao VARCHAR(25) NOT NULL,
+	unidade_medida CHAR(2),
+	version BIGINT
+) Engine = INNODB;
+
+CREATE TRIGGER versioning_combustiveis_ins BEFORE INSERT ON combustiveis FOR EACH ROW SET NEW.version = (select now() + 0);
+CREATE TRIGGER versioning_combustiveis_upd BEFORE UPDATE ON combustiveis FOR EACH ROW SET NEW.version = (select now() + 0);
 
 -- POSTOS
 create table IF NOT EXISTS postos (
@@ -40,10 +52,12 @@ CREATE TRIGGER versioning_postos_upd BEFORE UPDATE ON postos FOR EACH ROW SET NE
 create table IF NOT EXISTS postos_precos (
 	id BIGINT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
 	id_posto BIGINT NOT NULL,
+	id_combustivel INT(3) NOT NULL,
 	preco DECIMAL(4,2) NOT NULL,
 	dh_data datetime,
 	version BIGINT,
-	FOREIGN KEY (id_posto) REFERENCES postos(id)
+	FOREIGN KEY (id_posto) REFERENCES postos(id),
+	FOREIGN KEY (id_combustivel) REFERENCES combustiveis(id)
 ) Engine = INNODB;
 
 CREATE TRIGGER versioning_postos_precos_ins BEFORE INSERT ON postos_precos FOR EACH ROW SET NEW.version = (select now() + 0);
@@ -53,11 +67,14 @@ CREATE TRIGGER versioning_postos_precos_upd BEFORE UPDATE ON postos_precos FOR E
 CREATE OR REPLACE VIEW vw_precos AS
 SELECT id_posto, postos.nome as nome_posto, 
 	   bandeiras.id as id_bandeira, IFNULL(bandeiras.nome, 'Sem bandeira - (bandeira branca)') as nome_bandeira, 
-	   cidades.nome as cidade, postos.endereco, postos_precos.preco, dh_data as data
+	   cidades.nome as cidade, postos.endereco, 
+	   combustiveis.descricao as combustivel,
+	   postos_precos.preco, dh_data as data
 FROM postos_precos
 JOIN postos ON (postos.id = postos_precos.id_posto)
 JOIN cidades ON (cidades.codigo = postos.codigo_cidade)
+JOIN combustiveis ON (combustiveis.id = postos_precos.id_combustivel)
 LEFT JOIN bandeiras ON (bandeiras.id = postos.id_bandeira)
-WHERE dh_data = (select max(dh_data) from postos_precos pp where pp.id_posto = postos_precos.id_posto)
-group by postos_precos.id_posto;
+WHERE dh_data = (select max(dh_data) from postos_precos pp where pp.id_posto = postos_precos.id_posto and pp.id_combustivel = postos_precos.id_combustivel)
+group by postos_precos.id_posto, postos_precos.id_combustivel;
 
