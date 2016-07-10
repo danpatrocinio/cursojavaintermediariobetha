@@ -9,6 +9,7 @@ public class PostosPrecos implements Entity, Serializable {
 	private static final long serialVersionUID = 5064002532216650238L;
 	private Timestamp dhData;
 	private Long id;
+	private Long idCombustivel;
 	private Long idPosto;
 	private BigDecimal preco;
 	private Long version;
@@ -20,6 +21,10 @@ public class PostosPrecos implements Entity, Serializable {
 	@Override
 	public Long getId() {
 		return id;
+	}
+
+	public Long getIdCombustivel() {
+		return idCombustivel;
 	}
 
 	public Long getIdPosto() {
@@ -42,6 +47,10 @@ public class PostosPrecos implements Entity, Serializable {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void setIdCombustivel(Long idCombustivel) {
+		this.idCombustivel = idCombustivel;
 	}
 
 	public void setIdPosto(Long idPosto) {
