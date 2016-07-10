@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.curso.preco.exceptions.RepositoryException;
 import com.curso.preco.model.Bandeiras;
 
 public class BandeirasRepository extends GenericRepository<Bandeiras> {
@@ -24,5 +25,27 @@ public class BandeirasRepository extends GenericRepository<Bandeiras> {
 		b.setNome("Bandeira " + id);
 		b.setVersion(System.currentTimeMillis());
 		return b;
+	}
+
+	@Override
+	public Bandeiras save(Bandeiras entity) throws RepositoryException {
+
+		validate(entity);
+
+		return super.save(entity);
+	}
+
+	@Override
+	public Bandeiras update(Bandeiras entity) throws RepositoryException {
+
+		validate(entity);
+
+		return super.update(entity);
+	}
+
+	private void validate(Bandeiras b) throws RepositoryException {
+		if (b.getNome() == null) {
+			throw new RepositoryException("O nome da bandeira deve ser informado!");
+		}
 	}
 }

@@ -2,11 +2,16 @@ package com.curso.preco.model.repositories;
 
 import java.util.List;
 
+import com.curso.preco.exceptions.RepositoryException;
 import com.curso.preco.model.ViewPrecos;
 
 public class ViewPrecosRepository extends GenericRepository<ViewPrecos> {
 
 	public ViewPrecosRepository() {
+	}
+
+	@Override
+	public void delete(Long id) throws RepositoryException {
 	}
 
 	@Override
@@ -36,6 +41,16 @@ public class ViewPrecosRepository extends GenericRepository<ViewPrecos> {
 	}
 
 	public List<ViewPrecos> getByWithoudIdBandeira() {
+		return null;
+	}
+
+	@Override
+	public ViewPrecos save(ViewPrecos entity) throws RepositoryException {
+		return null;
+	}
+
+	@Override
+	public ViewPrecos update(ViewPrecos entity) throws RepositoryException {
 		return null;
 	}
 }

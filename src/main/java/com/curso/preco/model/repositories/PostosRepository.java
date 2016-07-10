@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.curso.preco.exceptions.RepositoryException;
 import com.curso.preco.model.Postos;
 
 public class PostosRepository extends GenericRepository<Postos> {
@@ -28,5 +29,30 @@ public class PostosRepository extends GenericRepository<Postos> {
 		p.setDetalheEndereco("Ao lado da esquina " + id + " de Maio");
 		p.setVersion(System.currentTimeMillis());
 		return p;
+	}
+
+	@Override
+	public Postos save(Postos entity) throws RepositoryException {
+
+		validate(entity);
+
+		return super.save(entity);
+	}
+
+	@Override
+	public Postos update(Postos entity) throws RepositoryException {
+
+		validate(entity);
+
+		return super.save(entity);
+	}
+
+	private void validate(Postos p) throws RepositoryException {
+		if (p == null) {
+			throw new RepositoryException("");
+		}
+		if (p.getNome() == null) {
+			throw new RepositoryException("O nome do posto deve ser informado!");
+		}
 	}
 }
