@@ -28,15 +28,16 @@ public abstract class GenericCrud<E extends Entity> extends HttpServlet {
 	private E entity;
 	private GenericRepository<E> repository;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 
-		if (request.getParameter("id") == null || request.getParameter("id").isEmpty()) {
+		if (request.getParameter("id") != null || !request.getParameter("id").isEmpty()) {
 
 			try {
 
-				getRepository().delete(Long.parseLong(request.getParameter("id")));
+				getRepository().delete(entityClass, Long.parseLong(request.getParameter("id")));
 
 			} catch (NumberFormatException e) {
 				treatedError(response, GenericRepository.MSG_INVALID_PARAMETER,
@@ -53,6 +54,7 @@ public abstract class GenericCrud<E extends Entity> extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
@@ -65,7 +67,8 @@ public abstract class GenericCrud<E extends Entity> extends HttpServlet {
 
 			try {
 
-				entity = getRepository().getById(Long.parseLong(request.getParameter("id")));
+				entity = getRepository().getById(entityClass,
+				        Long.parseLong(request.getParameter("id")));
 				writer.append(entity.toJson());
 
 			} catch (NumberFormatException e) {
@@ -83,7 +86,7 @@ public abstract class GenericCrud<E extends Entity> extends HttpServlet {
 
 			try {
 
-				List<E> list = getRepository().getAll();
+				List<Entity> list = getRepository().getAll(entityClass);
 
 				EntityList json = new EntityList();
 
@@ -110,7 +113,7 @@ public abstract class GenericCrud<E extends Entity> extends HttpServlet {
 
 		PrintWriter writer = response.getWriter();
 
-		Map<String, Object> formData = new HashMap<>();
+		Map<String, Object> formData = new HashMap<String, Object>();
 		for (String key : request.getParameterMap().keySet()) {
 			formData.put(key, request.getParameter(key));
 		}

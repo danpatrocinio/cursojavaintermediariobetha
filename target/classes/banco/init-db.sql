@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS precodb;
 use precodb;
 
 create table IF NOT EXISTS cidades (
-	codigo INT(6) NOT NULL UNIQUE PRIMARY KEY,
+	id INT(6) NOT NULL UNIQUE PRIMARY KEY,
 	nome VARCHAR(255) NOT NULL,
 	uf CHAR(2)
 ) Engine = INNODB;
@@ -35,14 +35,14 @@ CREATE TRIGGER versioning_combustiveis_upd BEFORE UPDATE ON combustiveis FOR EAC
 create table IF NOT EXISTS postos (
 	id BIGINT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
 	id_bandeira INT(6),
-	codigo_cidade INT(6),
+	id_cidade INT(6),
 	nome VARCHAR(255) NOT NULL UNIQUE,
 	endereco VARCHAR(255) UNIQUE,
-	detalhe_endereco VARCHAR(255),
+	complemento VARCHAR(255),
 	numero VARCHAR(6),
 	version BIGINT,
 	FOREIGN KEY (id_bandeira) REFERENCES bandeiras(id),
-	FOREIGN KEY (codigo_cidade) REFERENCES cidades(codigo)
+	FOREIGN KEY (id_cidade) REFERENCES cidades(id)
 ) Engine = INNODB;
 
 CREATE TRIGGER versioning_postos_ins BEFORE INSERT ON postos FOR EACH ROW SET NEW.version = (select now() + 0);
@@ -66,15 +66,21 @@ CREATE TRIGGER versioning_postos_precos_upd BEFORE UPDATE ON postos_precos FOR E
 -- VIEW PARA VISUALIZAÇÃO RESUMIDA
 CREATE OR REPLACE VIEW vw_precos AS
 SELECT id_posto, postos.nome as nome_posto, 
-	   bandeiras.id as id_bandeira, IFNULL(bandeiras.nome, 'Sem bandeira - (bandeira branca)') as nome_bandeira, 
+	   bandeiras.id as id_bandeira, IFNULL(bandeiras.nome, 'Bandeira branca') as nome_bandeira, 
 	   cidades.nome as cidade, postos.endereco, 
 	   combustiveis.descricao as combustivel,
 	   postos_precos.preco, dh_data as data
 FROM postos_precos
 JOIN postos ON (postos.id = postos_precos.id_posto)
-JOIN cidades ON (cidades.codigo = postos.codigo_cidade)
+JOIN cidades ON (cidades.id = postos.id_cidade)
 JOIN combustiveis ON (combustiveis.id = postos_precos.id_combustivel)
 LEFT JOIN bandeiras ON (bandeiras.id = postos.id_bandeira)
 WHERE dh_data = (select max(dh_data) from postos_precos pp where pp.id_posto = postos_precos.id_posto and pp.id_combustivel = postos_precos.id_combustivel)
 group by postos_precos.id_posto, postos_precos.id_combustivel;
 
+CREATE OR REPLACE VIEW vw_postos AS
+SELECT postos.id, postos.nome, 
+	   IF(bandeiras.id is null, 'Bandeira branca', concat(bandeiras.id, ' - ', bandeiras.nome)) as bandeira, 
+	   postos.endereco, postos.numero
+FROM postos 
+LEFT JOIN bandeiras ON (bandeiras.id = postos.id_bandeira) order by postos.id;

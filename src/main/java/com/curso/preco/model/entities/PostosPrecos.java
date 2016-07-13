@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import com.curso.preco.annotations.EntityTable;
 import com.curso.preco.model.Entity;
 
+@EntityTable(name = "postos_precos")
 public class PostosPrecos implements Entity, Serializable {
 
 	private static final long serialVersionUID = 5064002532216650238L;

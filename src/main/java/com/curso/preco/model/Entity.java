@@ -1,6 +1,8 @@
 package com.curso.preco.model;
 
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -79,6 +81,42 @@ public interface Entity {
 		}
 
 		return this;
+	}
+
+	default Entity fromResultSet(ResultSet rs) throws ParseableException {
+		if (rs == null) {
+			return null;
+		}
+
+		Object value = null;
+		for (Field field : getClass().getDeclaredFields()) {
+			if (field.isAnnotationPresent(IgnoreOnParseable.class)) {
+				continue;
+			}
+			field.setAccessible(Boolean.TRUE);
+			try {
+				value = rs.getObject(field.getName());
+				if (value == null) {
+					continue;
+				}
+				if (field.getType().equals(Integer.class)) {
+					value = Integer.parseInt(value.toString().trim());
+				} else if (field.getType().equals(Long.class)) {
+					value = Long.parseLong(value.toString().trim());
+				}
+
+				field.set(this, value);
+
+			} catch (IllegalArgumentException | IllegalAccessException | SQLException e) {
+				throw new ParseableException(e.getMessage(), e);
+			}
+		}
+
+		return this;
+	}
+
+	default Entity getTableName() {
+		return getTableName();
 	}
 
 	default String toJson() throws ParseableException {

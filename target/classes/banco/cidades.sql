@@ -1,4 +1,4 @@
-INSERT INTO cidades (codigo, nome, uf) VALUES
+INSERT INTO cidades (id, nome, uf) VALUES
 (110001, 'ALTA FLORESTA D''OESTE', 'RO'),
 (110002, 'ARIQUEMES', 'RO'),
 (110003, 'CABIXI', 'RO'),
@@ -1668,7 +1668,7 @@ INSERT INTO cidades (codigo, nome, uf) VALUES
 (270170, 'CAPELA', 'AL'),
 (270180, 'CARNEIROS', 'AL'),
 (270190, 'CHA PRETA', 'AL');
-INSERT INTO cidades (codigo, nome, uf) VALUES
+INSERT INTO cidades (id, nome, uf) VALUES
 (270200, 'COITE DO NOIA', 'AL'),
 (270210, 'COLONIA LEOPOLDINA', 'AL'),
 (270220, 'COQUEIRO SECO', 'AL'),
@@ -3362,7 +3362,7 @@ INSERT INTO cidades (codigo, nome, uf) VALUES
 (350820, 'BURITIZAL', 'SP'),
 (350830, 'CABRALIA PAULISTA', 'SP'),
 (350840, 'CABREUVA', 'SP');
-INSERT INTO cidades (codigo, nome, uf) VALUES
+INSERT INTO cidades (id, nome, uf) VALUES
 (350850, 'CACAPAVA', 'SP'),
 (350860, 'CACHOEIRA PAULISTA', 'SP'),
 (350870, 'CACONDE', 'SP'),
@@ -5062,7 +5062,7 @@ INSERT INTO cidades (codigo, nome, uf) VALUES
 (432166, 'TRES CACHOEIRAS', 'RS'),
 (432170, 'TRES COROAS', 'RS'),
 (432180, 'TRES DE MAIO', 'RS');
-INSERT INTO cidades (codigo, nome, uf) VALUES
+INSERT INTO cidades (id, nome, uf) VALUES
 (432183, 'TRES FORQUILHAS', 'RS'),
 (432185, 'TRES PALMEIRAS', 'RS'),
 (432190, 'TRES PASSOS', 'RS'),

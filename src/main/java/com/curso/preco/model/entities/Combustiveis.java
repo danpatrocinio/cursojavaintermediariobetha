@@ -2,9 +2,11 @@ package com.curso.preco.model.entities;
 
 import java.io.Serializable;
 
+import com.curso.preco.annotations.EntityTable;
 import com.curso.preco.annotations.IgnoreOnParseable;
 import com.curso.preco.model.Entity;
 
+@EntityTable(name = "combustiveis")
 public class Combustiveis implements Entity, Serializable {
 
 	@IgnoreOnParseable

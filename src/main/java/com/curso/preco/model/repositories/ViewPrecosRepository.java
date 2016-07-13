@@ -3,7 +3,8 @@ package com.curso.preco.model.repositories;
 import java.util.List;
 
 import com.curso.preco.exceptions.RepositoryException;
-import com.curso.preco.model.ViewPrecos;
+import com.curso.preco.model.Entity;
+import com.curso.preco.model.entities.ViewPrecos;
 
 public class ViewPrecosRepository extends GenericRepository<ViewPrecos> {
 
@@ -11,17 +12,8 @@ public class ViewPrecosRepository extends GenericRepository<ViewPrecos> {
 	}
 
 	@Override
-	public void delete(Long id) throws RepositoryException {
-	}
-
-	@Override
-	public List<ViewPrecos> getAll() {
-		return null;
-	}
-
-	@Override
-	public ViewPrecos getById(Long id) {
-		return null;
+	public void delete(Class<Entity> classe, Long id) throws RepositoryException {
+		throw new RepositoryException("Operação não permitida!");
 	}
 
 	public List<ViewPrecos> getByIdBandeira(Long idBandeira) {
@@ -46,11 +38,11 @@ public class ViewPrecosRepository extends GenericRepository<ViewPrecos> {
 
 	@Override
 	public ViewPrecos save(ViewPrecos entity) throws RepositoryException {
-		return null;
+		throw new RepositoryException("Operação não permitida!");
 	}
 
 	@Override
 	public ViewPrecos update(ViewPrecos entity) throws RepositoryException {
-		return null;
+		throw new RepositoryException("Operação não permitida!");
 	}
 }

@@ -2,23 +2,26 @@ package com.curso.preco.model.entities;
 
 import java.io.Serializable;
 
+import com.curso.preco.annotations.EntityTable;
 import com.curso.preco.annotations.IgnoreOnParseable;
 import com.curso.preco.model.Entity;
 
+@EntityTable(name = "postos")
 public class Postos implements Entity, Serializable {
 
 	@IgnoreOnParseable
 	private static final long serialVersionUID = 9067527960294783649L;
-	private String detalheEndereco;
+	private String complemento;
 	private String endereco;
 	private Long id;
 	private Long idBandeira;
+	private Long idCidade;
 	private String nome;
 	private String numero;
 	private Long version;
 
-	public String getDetalheEndereco() {
-		return detalheEndereco;
+	public String getComplemento() {
+		return complemento;
 	}
 
 	public String getEndereco() {
@@ -34,6 +37,10 @@ public class Postos implements Entity, Serializable {
 		return idBandeira;
 	}
 
+	public Long getIdCidade() {
+		return idCidade;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -47,8 +54,8 @@ public class Postos implements Entity, Serializable {
 		return version;
 	}
 
-	public void setDetalheEndereco(String detalheEndereco) {
-		this.detalheEndereco = detalheEndereco;
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
 	}
 
 	public void setEndereco(String endereco) {
@@ -62,6 +69,10 @@ public class Postos implements Entity, Serializable {
 
 	public void setIdBandeira(Long idBandeira) {
 		this.idBandeira = idBandeira;
+	}
+
+	public void setIdCidade(Long idCidade) {
+		this.idCidade = idCidade;
 	}
 
 	public void setNome(String nome) {

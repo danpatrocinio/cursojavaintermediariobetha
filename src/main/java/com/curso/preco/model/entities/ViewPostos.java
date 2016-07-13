@@ -6,17 +6,23 @@ import com.curso.preco.annotations.EntityTable;
 import com.curso.preco.annotations.IgnoreOnParseable;
 import com.curso.preco.model.Entity;
 
-@EntityTable(name = "cidades")
-public class Cidades implements Entity, Serializable {
+@EntityTable(name = "vw_postos")
+public class ViewPostos implements Entity, Serializable {
 
 	@IgnoreOnParseable
-	private static final long serialVersionUID = 598471292690269897L;
-
+	private static final long serialVersionUID = 3651465100047368338L;
+	private String bandeira;
+	private String endereco;
 	private Long id;
 	private String nome;
-	private String uf;
+	private String numero;
 
-	public Cidades() {
+	public String getBandeira() {
+		return bandeira;
+	}
+
+	public String getEndereco() {
+		return endereco;
 	}
 
 	@Override
@@ -28,13 +34,21 @@ public class Cidades implements Entity, Serializable {
 		return nome;
 	}
 
-	public String getUf() {
-		return uf;
+	public String getNumero() {
+		return numero;
 	}
 
 	@Override
 	public Long getVersion() {
 		return null;
+	}
+
+	public void setBandeira(String bandeira) {
+		this.bandeira = bandeira;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
 	@Override
@@ -46,8 +60,8 @@ public class Cidades implements Entity, Serializable {
 		this.nome = nome;
 	}
 
-	public void setUf(String uf) {
-		this.uf = uf;
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 
 	@Override

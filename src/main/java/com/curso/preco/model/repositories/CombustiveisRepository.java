@@ -1,6 +1,7 @@
 package com.curso.preco.model.repositories;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.curso.preco.exceptions.RepositoryException;
 import com.curso.preco.model.entities.Combustiveis;
@@ -14,22 +15,6 @@ public class CombustiveisRepository extends GenericRepository<Combustiveis> {
 	}
 
 	public CombustiveisRepository() {
-	}
-
-	@Override
-	public List<Combustiveis> getAll() {
-		return new ArrayList<>(Arrays.asList(getById(1L), getById(2L), getById(3L)));
-	}
-
-	@Override
-	public Combustiveis getById(Long id) {
-
-		Combustiveis c = new Combustiveis();
-		c.setId(id);
-		c.setDescricao("Combustível " + id);
-		c.setUnidadeMedida("LT");
-		c.setVersion(System.currentTimeMillis());
-		return c;
 	}
 
 	@Override

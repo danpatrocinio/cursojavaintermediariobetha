@@ -1,0 +1,263 @@
+<div class="panel panel-default">
+	<div class="panel-heading">Postos</div>
+	<div class="panel-body">
+		<div class="headers-table">
+			<button type="button" onclick="newPosto();" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cadPostos">
+				Adicionar</button>
+		</div>
+  		<div id="t-postos">
+	  		<table class="table table-striped table-bordered">
+	  			<thead>
+		    		<tr>
+					  <th class="col-md-1">Código</th>
+					  <th class="col-md-3">Nome</th>
+					  <th class="col-md-3">Bandeira</th>
+					  <th class="col-md-3">Endereço</th>
+					  <th class="col-md-1">Número</th>
+					  <th class="col-md-1" colspan="2"></th>
+					</tr>
+				</thead>
+				<tbody>
+            		<tr>
+		            	<td>{{id}}</td>
+		                <td>{{nome}}</td>
+		                <td>{{bandeira}}</td>
+		                <td>{{endereco}}</td>
+		                <td>{{numero}}</td>
+		                <td style="text-align: center;">
+		                    <a href="#" onclick="edit({{id}})" data-toggle="modal" data-target="#cadPostos"
+		                    title="Editar linha">
+		                    	<span class="glyphicon glyphicon-pencil" />
+		                    </a>
+		                </td>
+		                <td style="text-align: center;">
+		                    <a href="#" onclick="excluir({{id}})" 
+		                        title="Excluir linha">
+		                    	<span class="glyphicon glyphicon-trash" />
+		                    </a>
+		                </td>
+            		</tr>
+        		</tbody>
+	  		</table>
+		</div>
+	</div>
+</div>
+
+<div id="cadPostos" class="modal fade" role="dialog">
+  	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Cadastro de postos</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+                    <input id="id" type="hidden" name="id" />
+                    <div id="nome-group" class="form-group">
+                        <label class="col-sm-2 control-label">Nome</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="nome" />
+                        </div>
+                    </div>
+                    <div id="bandeira-group" class="form-group">
+                        <label for="bandeiras" class="col-sm-2 control-label">Bandeira</label>
+                        <div class="col-sm-10">
+                          	<select id="bandeiras" style="width: 100%;"></select>
+                        </div>
+                    </div>
+                    <div id="cidade-group" class="form-group">
+                        <label for="cidades" class="col-sm-2 control-label">Cidade</label>
+                        <div class="col-sm-10">
+                    		<select id="cidades" style="width: 100%;"></select>
+            		    </div>
+                    </div>
+                    <div id="endereco-group" class="form-group">
+                        <label class="col-sm-2 control-label">Endereço</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="endereco" />
+                        </div>
+                    </div>
+                    <div id="numero-group" class="form-group">
+                        <label class="col-sm-2 control-label">Número</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="numero" />
+                        </div>
+                    </div>
+                    <div id="complemento-group" class="form-group">
+                        <label class="col-sm-2 control-label">Complemento</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="complemento" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            <button id="btnSalvar" type="button" class="btn btn-primary btn-lg btn-block">Salvar</button>
+                        </div>
+                    </div>
+                </form>
+	     	</div>
+			<div class="modal-footer">
+				<button id="dtFechar" type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+			</div>
+    	</div>
+  	</div>
+</div>
+
+
+
+<script type="text/javascript">
+
+	var prepareSearchCidades = function prepareSearchCidades() {
+		$("#cidades").select2({
+		  	placeholder: "Buscar a cidade",
+	  		allowClear: true,
+			minimumInputLength: 3,
+			ajax: {
+			    url: "http://localhost:8080/preco/cidades",
+			    dataType: 'json',
+			    delay: 250,
+			    data: function (params) {
+					return {
+						nome: params.term
+					};
+			    },
+			    processResults: function (data) {
+				    return {
+				        results: $.map(data, function(cidade) {
+				            return { id: cidade.id, text: cidade.nome + ' - ' + cidade.uf };
+				        })
+				    };
+				}
+		  	}
+		});
+	};
+
+	var allBandeiras = [];
+	var loadBandeirasOptions = function loadBandeirasOptions(){
+	 	if (!allBandeiras || allBandeiras.length === 0) {
+	 		$.getJSON('bandeiras').success(function (bandeiras) {
+		 		bandeiras.forEach(function (item, i) {
+		 			allBandeiras[i] = {id: item.id, text: item.id + ' - ' + item.nome};
+	 			});
+				$("#bandeiras").select2({
+					placeholder: "Selecione a bandeira",
+					allowClear: true,
+				   	data : allBandeiras
+				});
+		 	});
+	 	} else {
+	 		$("#bandeiras").select2({
+				placeholder: "Selecione a bandeira",
+				allowClear: true,
+			   	data : allBandeiras
+			});
+	 	};
+	};
+
+	$(function(){
+
+		function loadTable() {
+		    $.getJSON('vwpostos').success(function (registros) {
+		         window.templateTr = window.templateTr || $('#t-postos table tbody').html();
+		         var trHtml = window.templateTr;
+		         var respHtml = "";
+		         registros.forEach(function (item) {
+		            respHtml += trHtml.replace(/\{\{id\}\}/g, item.id)
+		                    .replace(/\{\{nome\}\}/g, item.nome)
+		                    .replace(/\{\{bandeira\}\}/g, item.bandeira)
+		                    .replace(/\{\{endereco\}\}/g, item.endereco)
+		                    .replace(/\{\{numero\}\}/g, item.numero);
+		        });
+		        $('#t-postos table tbody').html(respHtml);
+		    });
+		};
+
+		$('#btnSalvar').click(function () {
+
+
+			var data = $('form').serialize() 
+						+ '&idBandeira=' + $("#bandeiras").val() 
+						+ '&idCidade=' + $("#cidades").val();
+
+			$.post('postos', data, function (data) {
+                alert('Os dados foram salvos com sucesso!');
+                $('#dtFechar').click();
+                prepareSearchCidades();
+                loadBandeirasOptions();
+                loadTable();
+            });
+		});
+
+		loadTable();
+		loadBandeirasOptions();
+	});
+
+	function loadBandeira(id) {
+
+		loadBandeirasOptions();
+
+		if (!!id) {
+			allBandeiras.forEach(function(bandeira){
+				if (bandeira.id === id) {
+					//$("#bandeiras").select2('val', bandeira.text);
+					$("#bandeiras").html('<option value="' + bandeira.id + '" selected="selected">' + bandeira.text + '</option>');
+				};
+			});
+		} else {
+			$("#bandeiras").val(null).trigger("change");
+		};
+	};
+
+	function loadCidade(id) {
+
+		prepareSearchCidades();
+
+		if (!!id) {
+			$.getJSON('cidades?id='+id).success(function (cidade) {
+	 			$("#cidades").html('<option value="' + cidade.id + '" selected="selected">' + cidade.nome + ' - ' + cidade.uf + '</option>');
+		 	});
+		} else {
+			$("#cidades").val(null).trigger("change");
+		};
+	};
+
+	function newPosto(){
+		loadBandeirasOptions();
+		$('input[name=id]').val('');
+		$('input[name=nome]').val('');
+		$('input[name=endereco]').val('');
+		$('input[name=numero]').val('');
+		$('input[name=complemento]').val('');
+		$("#bandeiras").val(null).trigger("change");
+	};
+
+	function edit(id){
+		if (!!id) {
+			var posto = {};
+			$.getJSON('postos?id='+id).success(function (data) {
+				posto = data;
+				$('input[name=id]').val(posto.id);
+				$('input[name=nome]').val(posto.nome);
+				$('input[name=endereco]').val(posto.endereco);
+				$('input[name=numero]').val(posto.numero);
+				$('input[name=complemento]').val(posto.complemento);
+				loadBandeira(posto.idBandeira);
+				loadCidade(posto.idCidade);
+			});
+		};
+	};
+
+	function excluir(id) {
+	    if (confirm("Deseja realmente excluir o registro " + id + "?")) {
+	        $.ajax("postos?id=" + id, {
+	            type: "DELETE"
+	        }).success(function () {
+	            alert('Registro excluido com sucesso!');
+	        }).error( function(result){
+	        	alert(result.responseText);
+	        });
+	    }
+	};
+
+</script>

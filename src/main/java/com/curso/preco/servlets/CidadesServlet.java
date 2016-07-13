@@ -45,7 +45,8 @@ public class CidadesServlet extends GenericCrud<Cidades> {
 				if (cidades != null && !cidades.isEmpty()) {
 					EntityList json = new EntityList();
 					cidades.forEach(json);
-					writer.append(json.toString());
+					String ret = json.toString();
+					writer.append(ret);
 					writer.flush();
 					writer.close();
 					return;

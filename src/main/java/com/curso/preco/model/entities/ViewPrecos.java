@@ -1,9 +1,13 @@
-package com.curso.preco.model;
+package com.curso.preco.model.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import com.curso.preco.annotations.EntityTable;
+import com.curso.preco.model.Entity;
+
+@EntityTable(name = "vw_precos")
 public class ViewPrecos implements Entity, Serializable {
 
 	private static final long serialVersionUID = 6328092706147151265L;

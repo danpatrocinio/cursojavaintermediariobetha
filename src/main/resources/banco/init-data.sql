@@ -1,7 +1,9 @@
 insert into bandeiras (id, nome) values 
-(null, "Bandeira 1"),
-(null, "Bandeira 2"),
-(null, "Bandeira 3");
+(null, "BR"),
+(null, "American oil"),
+(null, "Shell"),
+(null, "Texaco"),
+(null, "Ipiranga");
 
 insert into combustiveis(id, descricao, unidade_medida) values 
 (null, 'Gasolina comum','LT'),
@@ -12,7 +14,7 @@ insert into combustiveis(id, descricao, unidade_medida) values
 (null, 'GNV','M3'),
 (null, 'Óleo diesel','LT');
 
-insert into postos (id, id_bandeira, codigo_cidade, nome, endereco, detalhe_endereco, numero) values
+insert into postos (id, id_bandeira, id_cidade, nome, endereco, complemento, numero) values
 (null, 1, 420460, "Posto 1 de Criciuma", "Rua de Criciuma", "detalhe endereco 1", "100"),
 (null, 1, 420930, "Posto 2 de Lages", "Rua de Lages", "detalhe endereco 2", "200"),
 (null, 1, 420425, "Posto 3 de Cocal do Sul", "Rua de Cocal do Sul", "detalhe endereco 3", "300"),
