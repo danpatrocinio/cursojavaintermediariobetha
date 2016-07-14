@@ -2,8 +2,11 @@
 	<div class="panel-heading">Postos</div>
 	<div class="panel-body">
 		<div class="headers-table">
-			<button type="button" onclick="newPosto();" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cadPostos">
-				Adicionar</button>
+			<button type="button" onclick="newPosto();" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cadPostos">Adicionar</button>
+			<div id="p-message" name="p-message" class="alert alert-danger" role="alert" hidden>
+		  		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			  	 <span id="message"></span>
+			</div>
 		</div>
   		<div id="t-postos">
 	  		<table class="table table-striped table-bordered">
@@ -49,6 +52,10 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Cadastro de postos</h4>
+				<div id="p-message-modal" name="p-message-modal" class="alert alert-danger" role="alert" hidden>
+			  		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  	 <span id="message-modal"></span>
+				</div>
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal">
@@ -155,19 +162,25 @@
 	 	};
 	};
 
+	var clearMessage = function(){
+		$("#p-message").hide();
+		$("#p-message-modal").hide();
+	};
+
+
 	$(function(){
 
-		function loadTable() {
+		function loadTablePostos() {
 		    $.getJSON('vwpostos').success(function (registros) {
-		         window.templateTr = window.templateTr || $('#t-postos table tbody').html();
+		         window.templateTr =  $('#t-postos table tbody').html();
 		         var trHtml = window.templateTr;
 		         var respHtml = "";
 		         registros.forEach(function (item) {
 		            respHtml += trHtml.replace(/\{\{id\}\}/g, item.id)
 		                    .replace(/\{\{nome\}\}/g, item.nome)
-		                    .replace(/\{\{bandeira\}\}/g, item.bandeira)
-		                    .replace(/\{\{endereco\}\}/g, item.endereco)
-		                    .replace(/\{\{numero\}\}/g, item.numero);
+		                    .replace(/\{\{bandeira\}\}/g, !!item.bandeira ? item.bandeira : '')
+		                    .replace(/\{\{endereco\}\}/g, !!item.endereco ? item.endereco : '')
+		                    .replace(/\{\{numero\}\}/g, !!item.numero ? item.numero : '');
 		        });
 		        $('#t-postos table tbody').html(respHtml);
 		    });
@@ -175,6 +188,7 @@
 
 		$('#btnSalvar').click(function () {
 
+			clearMessage();
 
 			var data = $('form').serialize() 
 						+ '&idBandeira=' + $("#bandeiras").val() 
@@ -185,11 +199,19 @@
                 $('#dtFechar').click();
                 prepareSearchCidades();
                 loadBandeirasOptions();
-                loadTable();
-            });
+                loadTablePostos();
+            }).fail(function(data) {
+			    $('#message-modal').html(data.responseText);
+	        	$('#p-message-modal').show();
+			});
 		});
 
-		loadTable();
+		$('#dtFechar').click(function () {
+			clearMessage();
+		});
+
+		clearMessage();
+		loadTablePostos();
 		loadBandeirasOptions();
 	});
 
@@ -200,7 +222,6 @@
 		if (!!id) {
 			allBandeiras.forEach(function(bandeira){
 				if (bandeira.id === id) {
-					//$("#bandeiras").select2('val', bandeira.text);
 					$("#bandeiras").html('<option value="' + bandeira.id + '" selected="selected">' + bandeira.text + '</option>');
 				};
 			});
@@ -223,16 +244,19 @@
 	};
 
 	function newPosto(){
+		clearMessage();
 		loadBandeirasOptions();
-		$('input[name=id]').val('');
-		$('input[name=nome]').val('');
-		$('input[name=endereco]').val('');
-		$('input[name=numero]').val('');
-		$('input[name=complemento]').val('');
+		$('input[name=id]').val(0);
+		$('input[name=nome]').val(null);
+		$('input[name=endereco]').val(null);
+		$('input[name=numero]').val(null);
+		$('input[name=complemento]').val(null);
 		$("#bandeiras").val(null).trigger("change");
+		prepareSearchCidades();
 	};
 
 	function edit(id){
+		clearMessage();
 		if (!!id) {
 			var posto = {};
 			$.getJSON('postos?id='+id).success(function (data) {
@@ -249,13 +273,15 @@
 	};
 
 	function excluir(id) {
+		clearMessage();
 	    if (confirm("Deseja realmente excluir o registro " + id + "?")) {
 	        $.ajax("postos?id=" + id, {
 	            type: "DELETE"
 	        }).success(function () {
 	            alert('Registro excluido com sucesso!');
 	        }).error( function(result){
-	        	alert(result.responseText);
+	        	$('#message').html(result.responseText);
+	        	$('#p-message').show();
 	        });
 	    }
 	};

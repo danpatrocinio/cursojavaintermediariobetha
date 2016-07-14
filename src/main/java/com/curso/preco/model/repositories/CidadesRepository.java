@@ -24,53 +24,6 @@ public class CidadesRepository extends GenericRepository<Cidades> {
 		throw new RepositoryException("Operação não permitida!");
 	}
 
-	//	@Override
-	//	public List<Entity> getAll(String table) throws RepositoryException {
-	//		try {
-	//			List<Entity> cidades = new ArrayList<Entity>();
-	//
-	//			Statement stm = Connection.get().getStm();
-	//			ResultSet rs = stm.executeQuery("SELECT * FROM cidades");
-	//
-	//			while (rs.next()) {
-	//				//cidades.add(parse(rs));
-	//				cidades.add(new Cidades().fromResultSet(rs));
-	//			}
-	//			return cidades;
-	//		} catch (SQLException ex) {
-	//			Logger.getLogger(CidadesRepository.class.getName()).log(Level.SEVERE, null, ex);
-	//			throw new RepositoryException("Erro ao recuperar lista do banco.", ex);
-	//		} catch (ParseableException e) {
-	//			Logger.getLogger(CidadesRepository.class.getName()).log(Level.SEVERE, null, e);
-	//			throw new RepositoryException("Erro ao recuperar lista do banco.", e);
-	//		}
-	//	}
-
-	//	@Override
-	//	public Cidades getById(Class<Entity> classe, Long codigo) throws RepositoryException {
-	//		try {
-	//
-	//			if (codigo == null) {
-	//				throw new RepositoryException(
-	//				        message(GenericRepository.MSG_PARAMETER_MISSING, "id"));
-	//			}
-	//
-	//			PreparedStatement stm = Connection.get()
-	//			        .getParamStm("SELECT * FROM cidades WHERE codigo = ?");
-	//			stm.setLong(1, codigo);
-	//			ResultSet rs = stm.executeQuery();
-	//			if (rs.next()) {
-	//				return (Cidades) new Cidades().fromResultSet(rs);
-	//			}
-	//
-	//		} catch (SQLException | ParseableException ex) {
-	//			Logger.getLogger(CidadesRepository.class.getName()).log(Level.SEVERE, null, ex);
-	//			throw new RepositoryException("Erro ao buscar o registro", ex);
-	//		}
-	//
-	//		return null;
-	//	}
-
 	public List<Cidades> getByNome(String nome) throws RepositoryException {
 		try {
 
@@ -104,13 +57,5 @@ public class CidadesRepository extends GenericRepository<Cidades> {
 	public Cidades update(Cidades entity) throws RepositoryException {
 		throw new RepositoryException("Operação não permitida!");
 	}
-
-	//	private Cidades parse(ResultSet rs) throws SQLException {
-	//		Cidades c = new Cidades();
-	//		c.setId(rs.getLong("codigo"));
-	//		c.setNome(rs.getString("nome"));
-	//		c.setUf(rs.getString("uf"));
-	//		return c;
-	//	}
 
 }

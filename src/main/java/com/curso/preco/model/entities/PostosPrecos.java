@@ -5,18 +5,26 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import com.curso.preco.annotations.EntityTable;
+import com.curso.preco.annotations.IgnoreOnParseable;
 import com.curso.preco.model.Entity;
 
 @EntityTable(name = "postos_precos")
 public class PostosPrecos implements Entity, Serializable {
 
+	@IgnoreOnParseable
 	private static final long serialVersionUID = 5064002532216650238L;
+	private String descricaoCombustivel;
 	private Timestamp dhData;
 	private Long id;
 	private Long idCombustivel;
 	private Long idPosto;
+	private String nomePosto;
 	private BigDecimal preco;
 	private Long version;
+
+	public String getDescricaoCombustivel() {
+		return descricaoCombustivel;
+	}
 
 	public Timestamp getDhData() {
 		return dhData;
@@ -35,6 +43,10 @@ public class PostosPrecos implements Entity, Serializable {
 		return idPosto;
 	}
 
+	public String getNomePosto() {
+		return nomePosto;
+	}
+
 	public BigDecimal getPreco() {
 		return preco;
 	}
@@ -42,6 +54,10 @@ public class PostosPrecos implements Entity, Serializable {
 	@Override
 	public Long getVersion() {
 		return version;
+	}
+
+	public void setDescricaoCombustivel(String descricaoCombustivel) {
+		this.descricaoCombustivel = descricaoCombustivel;
 	}
 
 	public void setDhData(Timestamp dhData) {
@@ -59,6 +75,10 @@ public class PostosPrecos implements Entity, Serializable {
 
 	public void setIdPosto(Long idPosto) {
 		this.idPosto = idPosto;
+	}
+
+	public void setNomePosto(String nomePosto) {
+		this.nomePosto = nomePosto;
 	}
 
 	public void setPreco(BigDecimal preco) {

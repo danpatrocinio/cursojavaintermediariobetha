@@ -36,7 +36,7 @@ create table IF NOT EXISTS postos (
 	id BIGINT AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
 	id_bandeira INT(6),
 	id_cidade INT(6),
-	nome VARCHAR(255) NOT NULL UNIQUE,
+	nome VARCHAR(255) NOT NULL,
 	endereco VARCHAR(255) UNIQUE,
 	complemento VARCHAR(255),
 	numero VARCHAR(6),
@@ -76,7 +76,7 @@ JOIN cidades ON (cidades.id = postos.id_cidade)
 JOIN combustiveis ON (combustiveis.id = postos_precos.id_combustivel)
 LEFT JOIN bandeiras ON (bandeiras.id = postos.id_bandeira)
 WHERE dh_data = (select max(dh_data) from postos_precos pp where pp.id_posto = postos_precos.id_posto and pp.id_combustivel = postos_precos.id_combustivel)
-group by postos_precos.id_posto, postos_precos.id_combustivel;
+order by postos_precos.id_posto;
 
 CREATE OR REPLACE VIEW vw_postos AS
 SELECT postos.id, postos.nome, 

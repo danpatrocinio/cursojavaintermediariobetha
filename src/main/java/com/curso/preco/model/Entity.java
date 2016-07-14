@@ -1,6 +1,7 @@
 package com.curso.preco.model;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -63,13 +64,21 @@ public interface Entity {
 					} else {
 						if (field.getType().equals(String.class)) {
 							String aux = ((String) value).trim();
-							if (aux.startsWith("\"") || aux.startsWith("'")) {
-								value = aux.subSequence(1, aux.length() - 1);
+							if ("".equals(aux)) {
+								value = null;
+							} else {
+								if (aux.startsWith("\"") || aux.startsWith("'")) {
+									value = aux.subSequence(1, aux.length() - 1);
+								}
 							}
 						} else if (field.getType().equals(Integer.class)) {
 							value = Integer.parseInt(value.toString().trim());
 						} else if (field.getType().equals(Long.class)) {
 							value = Long.parseLong(value.toString().trim());
+						} else if (field.getType().equals(BigDecimal.class)) {
+							value = new BigDecimal(value.toString().trim());
+						} else if (field.getType().equals(Timestamp.class)) {
+							System.out.println(value);
 						}
 					}
 				}

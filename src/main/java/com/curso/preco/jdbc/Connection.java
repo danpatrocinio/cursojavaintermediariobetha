@@ -36,6 +36,11 @@ public class Connection {
 		return conn.prepareStatement(sql);
 	}
 
+	public PreparedStatement getParamStm(String sql, int statementOption) throws SQLException {
+		getConn();
+		return conn.prepareStatement(sql, statementOption);
+	}
+
 	public Statement getStm() throws SQLException {
 		getConn();
 		return conn.createStatement();

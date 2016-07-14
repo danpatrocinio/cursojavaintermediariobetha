@@ -55,16 +55,16 @@ public abstract class GenericRepository<E extends Entity> implements Repository<
 			}
 			return list;
 		} catch (SQLException ex) {
-			Logger.getLogger(CidadesRepository.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(GenericRepository.class.getName()).log(Level.SEVERE, null, ex);
 			throw new RepositoryException("Erro ao recuperar lista do banco.", ex);
 		} catch (ParseableException e) {
-			Logger.getLogger(CidadesRepository.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(GenericRepository.class.getName()).log(Level.SEVERE, null, e);
 			throw new RepositoryException("Erro ao recuperar lista do banco.", e);
 		} catch (InstantiationException e) {
-			Logger.getLogger(CidadesRepository.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(GenericRepository.class.getName()).log(Level.SEVERE, null, e);
 			throw new RepositoryException("Erro ao recuperar lista do banco.", e);
 		} catch (IllegalAccessException e) {
-			Logger.getLogger(CidadesRepository.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(GenericRepository.class.getName()).log(Level.SEVERE, null, e);
 			throw new RepositoryException("Erro ao recuperar lista do banco.", e);
 		}
 	}

@@ -1,1 +1,220 @@
-<div class="h1">home</div>
+<div class="panel panel-default">
+	<div class="panel-heading">Preços</div>
+	<div class="panel-body">
+		<div class="headers-table">
+		</div>
+  		<div id="t-precos">
+	  		<table class="table table-striped table-bordered">
+	  			<thead>
+		    		<tr>
+					  <th class="col-md-3" rowspan="{{rs}}">Posto</th>
+					  <th class="col-md-5" rowspan="{{rs}}">Endereço</th>
+					  <th class="col-md-2">Combustível</th>
+					  <th class="col-md-1" style="text-align: right;">Preço(R$)</th>
+					  <th class="col-md-1">Data/hora</th>
+					  <!-- <th class="col-md-1" colspan="2"></th> -->
+					</tr>
+				</thead>
+				<tbody>
+            		<tr>
+		            	<td>{{posto}}</td>
+		                <td>{{endereco}}</td>
+		                <td>{{combustivel}}</td>
+		                <td style="text-align: right;">{{preco}}</td>
+		                <td title="{{hora}}">{{data}}</td>
+            		</tr>
+        		</tbody>
+	  		</table>
+		</div>
+	</div>
+</div>
+
+<div id="cadPostos" class="modal fade" role="dialog">
+  	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Cadastro de postos</h4>
+				<div id="p-message-modal" name="p-message-modal" class="alert alert-danger" role="alert" hidden>
+			  		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  	 <span id="message-modal"></span>
+				</div>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal">
+                    <input id="id" type="hidden" name="id" />
+                    <div id="nome-group" class="form-group">
+                        <label class="col-sm-2 control-label">Nome</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="nome" />
+                        </div>
+                    </div>
+                    <div id="bandeira-group" class="form-group">
+                        <label for="bandeiras" class="col-sm-2 control-label">Bandeira</label>
+                        <div class="col-sm-10">
+                          	<select id="bandeiras" style="width: 100%;"></select>
+                        </div>
+                    </div>
+                    <div id="cidade-group" class="form-group">
+                        <label for="cidades" class="col-sm-2 control-label">Cidade</label>
+                        <div class="col-sm-10">
+                    		<select id="cidades" style="width: 100%;"></select>
+            		    </div>
+                    </div>
+                    <div id="endereco-group" class="form-group">
+                        <label class="col-sm-2 control-label">Endereço</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="endereco" />
+                        </div>
+                    </div>
+                    <div id="numero-group" class="form-group">
+                        <label class="col-sm-2 control-label">Número</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="numero" />
+                        </div>
+                    </div>
+                    <div id="complemento-group" class="form-group">
+                        <label class="col-sm-2 control-label">Complemento</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="complemento" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            <button id="btnSalvar" type="button" class="btn btn-primary btn-lg btn-block">Salvar</button>
+                        </div>
+                    </div>
+                </form>
+	     	</div>
+			<div class="modal-footer">
+				<button id="btFechar" type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+			</div>
+    	</div>
+  	</div>
+</div>
+
+<script type="text/javascript">
+
+	var clearMessage = function(){
+		$("#p-message").hide();
+		$("#p-message-modal").hide();
+	};
+
+	$(function(){
+
+		function loadTableVwPrecos() {
+		    $.getJSON('vwprecos').success(function (registros) {
+		         window.templateTr =  $('#t-precos table tbody').html();
+		         var trHtml = window.templateTr;
+		         var respHtml = "";
+		         var cont = 1;
+		         var bandeira = "";
+		         var posto = "";
+		         var endereco = "";
+		         var cidade = "";
+		         var preco = "";
+		         var data = "";
+		         var hora = "";
+		         var idPostoAnt = 0;
+		         registros.forEach(function (item) {
+
+		         	if (idPostoAnt === 0) {
+		         		idPostoAnt = item.idPosto;
+		         	} else {
+		         		if (idPostoAnt === item.idPosto) {
+		         			cont = cont + 1;
+		         		} else {
+		         			cont = 1;
+		         			idPostoAnt = item.idPosto;
+		         		};
+		         	};
+
+		         	bandeira = (!!item.nomeBandeira ? ' ('+ item.nomeBandeira + ')' : '');
+		         	posto = item.nomePosto + bandeira;
+		         	cidade = (!!item.cidade ? ' ('+ item.cidade +')' : '');
+		         	endereco = (!!item.endereco ? item.endereco + cidade : cidade);
+		         	preco = (!!item.preco ? parseFloat(item.preco).toFixed(2) : item.preco);
+		         	data = !!item.data ? item.data.replace('.0','') : '';
+		         	hora = (data.length > 0 ? data.substring(11,19) : '');
+		         	data = hora.length > 0 ? data.substring(0, data.indexOf(hora)) : data;
+		         	hora = hora.length > 0 ? 'Hora: ' + hora : hora;
+		         	data = (data.length > 0 ? data.substring(8,10) +'/'+ data.substring(5,7) +'/' + data.substring(0,4) : data);
+
+		            respHtml += trHtml
+		            		.replace(/\{\{rs\}\}/g, cont)
+		            		.replace(/\{\{posto\}\}/g, cont < 2 ? posto : '')
+		                    .replace(/\{\{endereco\}\}/g, cont < 2 ? endereco : '')
+		                    .replace(/\{\{combustivel\}\}/g, item.combustivel)
+		                    .replace(/\{\{preco\}\}/g, preco)
+		                    .replace(/\{\{data\}\}/g, data)
+		                    .replace(/\{\{hora\}\}/g, hora);
+		        });
+		        $('#t-precos table tbody').html(respHtml);
+		    });
+		};
+
+		$('#btnSalvar').click(function () {
+
+			clearMessage();
+
+			var data = $('form').serialize();
+
+			$.post('vwprecos', data, function (data) {
+                alert('Os dados foram salvos com sucesso!');
+                $('#btFechar').click();
+                loadTableVwPrecos();
+            }).fail(function(data) {
+			    $('#message-modal').html(data.responseText);
+	        	$('#p-message-modal').show();
+			});
+		});
+
+		$('#btFechar').click(function () {
+			clearMessage();
+		});
+
+		clearMessage();
+		loadTableVwPrecos();
+	});
+
+	// function newPosto(){
+	// 	clearMessage();
+	// 	$('input[name=id]').val(0);
+	// 	$('input[name=nome]').val(null);
+	// 	$('input[name=endereco]').val(null);
+	// 	$('input[name=numero]').val(null);
+	// 	$('input[name=complemento]').val(null);
+	// 	$("#bandeiras").val(null).trigger("change");
+	// };
+
+	// function edit(id){
+	// 	clearMessage();
+	// 	if (!!id) {
+	// 		var posto = {};
+	// 		$.getJSON('postos?id='+id).success(function (data) {
+	// 			posto = data;
+	// 			$('input[name=id]').val(posto.id);
+	// 			$('input[name=nome]').val(posto.nome);
+	// 			$('input[name=endereco]').val(posto.endereco);
+	// 			$('input[name=numero]').val(posto.numero);
+	// 			$('input[name=complemento]').val(posto.complemento);
+	// 		});
+	// 	};
+	// };
+
+	// function excluir(id) {
+	// 	clearMessage();
+	//     if (confirm("Deseja realmente excluir o registro " + id + "?")) {
+	//         $.ajax("postos?id=" + id, {
+	//             type: "DELETE"
+	//         }).success(function () {
+	//             alert('Registro excluido com sucesso!');
+	//         }).error( function(result){
+	//         	$('#message').html(result.responseText);
+	//         	$('#p-message').show();
+	//         });
+	//     }
+	// };
+
+</script>

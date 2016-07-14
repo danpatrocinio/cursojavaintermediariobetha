@@ -23,7 +23,7 @@ public class PostosRepository extends GenericRepository<Postos> {
 	@Override
 	public List<Entity> getAll(Class classe) throws RepositoryException {
 		try {
-			List<Entity> postos = new ArrayList<Entity>();
+			List<Entity> list = new ArrayList<Entity>();
 
 			Statement stm = Connection.get().getStm();
 
@@ -31,10 +31,10 @@ public class PostosRepository extends GenericRepository<Postos> {
 			        "SELECT id, id_bandeira as idBandeira, id_cidade as idCidade, nome, endereco, complemento, numero, version FROM postos");
 
 			while (rs.next()) {
-				postos.add(new Postos().fromResultSet(rs));
+				list.add(new Postos().fromResultSet(rs));
 			}
 
-			return postos;
+			return list;
 
 		} catch (SQLException ex) {
 			Logger.getLogger(PostosRepository.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,9 +70,69 @@ public class PostosRepository extends GenericRepository<Postos> {
 		return null;
 	}
 
+	public List<Postos> getByNome(String nome) throws RepositoryException {
+		try {
+
+			if (nome == null) {
+				throw new RepositoryException(
+				        message(GenericRepository.MSG_PARAMETER_MISSING, "nome"));
+			}
+
+			List<Postos> postos = new ArrayList<Postos>();
+
+			PreparedStatement stm = Connection.get().getParamStm(
+			        "SELECT id, id_bandeira as idBandeira, id_cidade as idCidade, nome, endereco, complemento, numero, version FROM postos WHERE nome like ? limit 10");
+			stm.setString(1, "%" + nome.toUpperCase() + "%");
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()) {
+				postos.add((Postos) new Postos().fromResultSet(rs));
+			}
+			return postos;
+		} catch (SQLException | ParseableException ex) {
+			Logger.getLogger(PostosRepository.class.getName()).log(Level.SEVERE, null, ex);
+			throw new RepositoryException("Erro ao recuperar lista do banco.", ex);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
-	public Postos save(Postos entity) throws RepositoryException {
-		return super.save(entity);
+	public Postos save(Postos posto) throws RepositoryException {
+		try {
+			validate(posto);
+
+			String sql = "INSERT INTO postos (id_bandeira, id_cidade, nome, endereco, complemento, numero) VALUES (?, ?, ?, ?, ?, ?)";
+			if (posto.getIdBandeira() == null) {
+				sql = sql.replace("id_bandeira,", "").replace("(?, ", "(");
+			}
+			if (posto.getIdCidade() == null) {
+				sql = sql.replace("id_cidade,", "").replace("(?, ", "(");
+			}
+			PreparedStatement stm = Connection.get().getParamStm(sql,
+			        Statement.RETURN_GENERATED_KEYS);
+
+			int field = 0;
+			if (posto.getIdBandeira() != null) {
+				stm.setLong(++field, posto.getIdBandeira());
+			}
+			if (posto.getIdCidade() != null) {
+				stm.setLong(++field, posto.getIdCidade());
+			}
+			stm.setString(++field, posto.getNome());
+			stm.setString(++field, posto.getEndereco());
+			stm.setString(++field, posto.getComplemento());
+			stm.setString(++field, posto.getNumero());
+			stm.execute();
+
+			final ResultSet rs = stm.getGeneratedKeys();
+			if (rs.next()) {
+				return getById((Class<Entity>) posto.getClass(), rs.getLong(1));
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(PostosRepository.class.getName()).log(Level.SEVERE, null, ex);
+			throw new RepositoryException("Não foi possível inserir registro!", ex);
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

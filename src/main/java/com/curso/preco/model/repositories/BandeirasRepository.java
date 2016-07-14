@@ -8,21 +8,6 @@ public class BandeirasRepository extends GenericRepository<Bandeiras> {
 	public BandeirasRepository() {
 	}
 
-	//	@Override
-	//	public List<Entity> getAll() {
-	//		return new ArrayList<>(Arrays.asList(getById(1L), getById(2L), getById(3L)));
-	//	}
-
-	//	@Override
-	//	public Bandeiras getById(Long id) {
-	//
-	//		Bandeiras b = new Bandeiras();
-	//		b.setId(id);
-	//		b.setNome("Bandeira " + id);
-	//		b.setVersion(System.currentTimeMillis());
-	//		return b;
-	//	}
-
 	@Override
 	public Bandeiras save(Bandeiras entity) throws RepositoryException {
 

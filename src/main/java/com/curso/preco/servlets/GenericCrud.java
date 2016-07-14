@@ -156,7 +156,7 @@ public abstract class GenericCrud<E extends Entity> extends HttpServlet {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("utf-8");
 
-			if (entity != null && entity.getId() == null) {
+			if (entity != null && (entity.getId() == null || entity.getId().compareTo(0L) <= 0)) {
 				entity = getRepository().save(entity);
 				writer.append(entity.toJson());
 			} else if (entity != null) {
